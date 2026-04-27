@@ -1,4 +1,6 @@
-// SelectionSortVisualizer.jsx
+
+// ONLY the visualization. Title, description, complexity → SelectionSortPage.jsx
+
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { getSelectionSortAnimations, generateRandomArray } from '../algorithms/selectionSort';
 
@@ -143,24 +145,7 @@ export default function SelectionSortVisualizer() {
   const showNums = length <= 40;
 
   return (
-    <div className="algo-page">
-      <h1>Selection Sort</h1>
-      <p className="algo-description">
-        Selection Sort repeatedly finds the minimum element from the unsorted portion of the array
-        and moves it to the front. It makes exactly n–1 swaps, making it useful when writes are
-        costly, but is inefficient on large lists due to O(n²) comparisons.
-      </p>
-
-      <div className="complexity-box">
-        <h3>Time Complexity</h3>
-        <ul>
-          <li>Best Case: O(n²)</li>
-          <li>Average Case: O(n²)</li>
-          <li>Worst Case: O(n²)</li>
-          <li>Space Complexity: O(1) — in-place sorting</li>
-        </ul>
-      </div>
-
+    <>
       <div className="viz-section-title">Selection Sort Visualization</div>
 
       <div className="input-row">
@@ -212,6 +197,6 @@ export default function SelectionSortVisualizer() {
       <div className={`step-panel ${stepType}`}>
         {step || 'Press ▶ Start to begin the visualization.'}
       </div>
-    </div>
+    </>
   );
 }

@@ -33,7 +33,49 @@
   font-weight: bold;
   color: #333;
 }
+speed-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
 
+/* Scoped override: reset the insertionSort range-based .speed-label inside .speed-control */
+.speed-control .speed-label {
+  display: inline;
+  flex-direction: unset;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-right: 4px;
+}
+
+.btn-speed {
+  padding: 6px 14px;
+  background: #f3f4f6;
+  color: #546e7a;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.btn-speed:hover:not(.active) {
+  background: #e3f2fd;
+  color: #1565c0;
+  border-color: #90caf9;
+}
+
+
+.btn-speed.active {
+  background: #1976d2;
+  color: #fff;
+  border-color: #1976d2;
+}
 .controls {
   display: flex;
   flex-wrap: wrap;

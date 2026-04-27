@@ -1,4 +1,4 @@
-import TreeTraversalVisualizer from "../components/TreeTraversalVisualizer";
+import TreeTraversalVisualizer from "../components/treeTraversalVisualizer";
 
 function TreeTraversalPage() {
   return (

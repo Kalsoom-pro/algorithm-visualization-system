@@ -14,19 +14,25 @@ function BinarySearchVisualizer() {
   const [message, setMessage] = useState("");
 
   const [isPaused, setIsPaused] = useState(false);
-  const [isStopped, setIsStopped] = useState(false);
+  const [isRunning, setIsRunning] = useState(false);
+  const [speed, setSpeed] = useState(2); // 1=slow, 2=medium, 3=fast, 4=instant
 
   const pauseRef = useRef(isPaused);
-  const stopRef = useRef(isStopped);
+  const stopRef = useRef(false);
+  const speedRef = useRef(2);
 
-  function delay(ms = 900) {
-    return new Promise(res => {
+  const speedMap = { 1: 1200, 2: 700, 3: 300, 4: 10 };
+  const speedLabels = { 1: "Slow", 2: "Medium", 3: "Fast", 4: "Instant" };
+
+  function delay(ms = null) {
+    const delayMs = ms !== null ? ms : (speedMap[speedRef.current] ?? 700);
+    return new Promise((res) => {
       const start = Date.now();
       const check = () => {
         if (stopRef.current) return res("stopped");
-        if (pauseRef.current) setTimeout(check, 50);
-        else if (Date.now() - start >= ms) res();
-        else setTimeout(check, 50);
+        if (pauseRef.current) return setTimeout(check, 50);
+        if (Date.now() - start >= delayMs) return res();
+        setTimeout(check, 50);
       };
       check();
     });
@@ -37,10 +43,8 @@ function BinarySearchVisualizer() {
     for (let i = 0; i < 10; i++) arr.push(Math.floor(Math.random() * 90) + 10);
     arr.sort((a, b) => a - b);
     setArray(arr);
-    setLeft(null);
-    setRight(null);
-    setMid(null);
-    setMessage("");
+    resetSearchState();
+    setMessage("Random sorted array generated");
   }
 
   function loadUserArray() {
@@ -48,12 +52,24 @@ function BinarySearchVisualizer() {
       .split(",")
       .map(num => parseInt(num.trim()))
       .filter(num => !isNaN(num));
+    if (arr.length === 0) {
+      setMessage("No valid numbers found");
+      return;
+    }
     arr.sort((a, b) => a - b);
     setArray(arr);
+    resetSearchState();
+    setMessage("Custom array loaded and sorted");
+  }
+
+  function resetSearchState() {
     setLeft(null);
     setRight(null);
     setMid(null);
-    setMessage("");
+    setIsPaused(false);
+    setIsRunning(false);
+    pauseRef.current = false;
+    stopRef.current = false;
   }
 
   async function startSearch() {
@@ -66,10 +82,11 @@ function BinarySearchVisualizer() {
       return;
     }
 
-    setIsPaused(false);
-    setIsStopped(false);
+    resetSearchState();
+    setIsRunning(true);
     pauseRef.current = false;
     stopRef.current = false;
+    setMessage("Starting Binary Search...");
 
     const result = await binarySearch(
       array,
@@ -83,7 +100,14 @@ function BinarySearchVisualizer() {
       stopRef
     );
 
-    if (result === "stopped") setMessage("Search stopped");
+    setIsRunning(false);
+    if (result === "stopped") {
+      setMessage("Search stopped");
+    } else if (result === -1) {
+      // Message already set in binarySearch
+    } else {
+      setMessage(`✓ Target found at index ${result}`);
+    }
   }
 
   const handlePauseResume = () => {
@@ -94,37 +118,64 @@ function BinarySearchVisualizer() {
   };
 
   const handleStop = () => {
-    setIsStopped(true);
     stopRef.current = true;
+    setIsRunning(false);
+    setIsPaused(false);
+  };
+
+  const handleSpeedChange = (val) => {
+    setSpeed(val);
+    speedRef.current = val;
   };
 
   return (
     <div className="visualizer">
       <h2>Binary Search Visualization</h2>
 
-      <div className="controls">
+      {/* Array input controls */}
+      <div className="controls input-controls">
         <input
           type="text"
-          placeholder="Enter array (e.g. 10,20,30)"
+          placeholder="Enter array (e.g. 10,20,30,40,50)"
           value={arrayInput}
           onChange={(e) => setArrayInput(e.target.value)}
+          disabled={isRunning}
         />
-        <button onClick={loadUserArray}>Add Your Array</button>
-        <button onClick={generateRandomArray}>Generate Random Array</button>
+        <button onClick={loadUserArray} disabled={isRunning} className="btn btn-secondary">
+          Load Array
+        </button>
+        <button onClick={generateRandomArray} disabled={isRunning} className="btn btn-secondary">
+          Randomize
+        </button>
       </div>
 
-      <div className="controls">
+      {/* Target input */}
+      <div className="controls target-controls">
         <input
           type="number"
-          placeholder="Enter Target"
+          placeholder="Enter Target Value"
           value={target}
           onChange={(e) => setTarget(e.target.value)}
+          disabled={isRunning}
         />
-        <button onClick={startSearch}>Start Search</button>
-        <button onClick={handlePauseResume}>{isPaused ? "Resume" : "Pause"}</button>
-        <button onClick={handleStop}>Stop</button>
       </div>
 
+      {/* Speed control */}
+      <div className="speed-control">
+        <span className="speed-label">Speed:</span>
+        {[1, 2, 3, 4].map((s) => (
+          <button
+            key={s}
+            className={`btn btn-speed ${speed === s ? "active" : ""}`}
+            onClick={() => handleSpeedChange(s)}
+            disabled={isRunning}
+          >
+            {speedLabels[s]}
+          </button>
+        ))}
+      </div>
+
+      {/* Array visualization */}
       <div className="binary-container">
         {array.map((value, index) => {
           let className = "binary-box";
@@ -138,6 +189,31 @@ function BinarySearchVisualizer() {
             </div>
           );
         })}
+      </div>
+
+      {/* Playback controls */}
+      <div className="controls playback-controls">
+        <button
+          onClick={startSearch}
+          disabled={isRunning}
+          className="btn btn-primary"
+        >
+          Start Search
+        </button>
+        <button
+          onClick={handlePauseResume}
+          disabled={!isRunning}
+          className="btn btn-secondary"
+        >
+          {isPaused ? "Resume" : "Pause"}
+        </button>
+        <button
+          onClick={handleStop}
+          disabled={!isRunning}
+          className="btn btn-danger"
+        >
+          Stop
+        </button>
       </div>
 
       <p className="binary-message">{message}</p>

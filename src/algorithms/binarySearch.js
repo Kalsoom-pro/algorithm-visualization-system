@@ -59,3 +59,4 @@ export async function binarySearch(
   setMessage("Target Not Found");
   return -1;
 }
+

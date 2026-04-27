@@ -1,4 +1,3 @@
-// TreeTraversalVisualizer.jsx
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { SAMPLE_TREES, TRAVERSALS, collectTree } from '../algorithms/treeTraversal';
 
@@ -154,21 +153,7 @@ export default function TreeTraversalVisualizer() {
   const R  = nodes.length > 10 ? 16 : 20;
 
   return (
-    <div className="algo-page">
-      <h1>Tree Traversal</h1>
-      <p className="algo-description">
-        Tree traversal algorithms visit every node in a tree exactly once in a specific order.
-        The four main strategies are Inorder, Preorder, Postorder (all depth-first), and
-        BFS / Level Order (breadth-first). Each produces a different visit sequence.
-      </p>
-
-      <div className="complexity-box">
-        <h3>Time Complexity</h3>
-        <ul>
-          <li>All traversals: O(n) — every node visited exactly once</li>
-          <li>Space Complexity: O(h) for DFS (h = tree height), O(w) for BFS (w = max width)</li>
-        </ul>
-      </div>
+<div className="algo-page">
 
       {/* Traversal description */}
       <div style={{ background: '#e3f2fd', border: '1px solid #90caf9', borderRadius: 8, padding: '10px 16px', marginBottom: 20, fontSize: 13, color: '#1a1a2e', lineHeight: 1.7 }}>

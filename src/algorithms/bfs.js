@@ -41,7 +41,6 @@ export async function bfs(
     await wait();
     if (isStoppedRef.current) return;
 
-    // Explore all neighbors
     let neighbors = graph[node] || [];
 
     for (let neighbor of neighbors) {

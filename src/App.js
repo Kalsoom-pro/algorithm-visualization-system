@@ -17,7 +17,11 @@ import PrimsPage from "./pages/PrimsPage";
 import LinearSearchPage from "./pages/LinearSearchPage"
 import CoinChangePage from "./pages/CoinChangePage"
 import SudokuPage from "./pages/SudokuPage";
-
+import MergeSortPage     from './pages/mergeSortPage';
+import SelectionSortPage from './pages/selectionSortPage';
+import BucketSortPage    from './pages/bucketSortPage';
+import DijkstrasPage     from './pages/dijkstrasAlgorithmPage';
+import TreeTraversalPage from './pages/treeTraversalPage';
 
 function App() {
   const [page, setPage] = useState("home");
@@ -26,7 +30,7 @@ function App() {
     "Quick Sort","Linear Search","Prim's Algorithm","Coin Change Problem","Sudoku Solver",
     "Bubble Sort","Binary Search","Depth-First Search","0/1 Knapsack Problem","Tower of Hanoi",
     "Merge Sort","Selection Sort","Dijkstra's Algorithm","Bucket Sort","Tree Traversal",
-    "Insertion Sort","Heap Sort","Breadth-First Search","Kruskal's Algorithm","N-Queens Problem"
+    "Insertion Sort","Heap Sort","Breadth-First Search","Kruskal's Algorithm","N-Queens Problem",
   ];
 
   const algorithmPages = {
@@ -45,6 +49,11 @@ function App() {
     "Linear Search":<LinearSearchPage/>,
     "Coin Change Problem":<CoinChangePage/>,
     "Sudoku Solver":<SudokuPage/>,
+    "Merge Sort": <MergeSortPage />,
+  "Selection Sort": <SelectionSortPage />,
+  "Dijkstra's Algorithm": <DijkstrasPage />,
+  "Bucket Sort": <BucketSortPage />,
+  "Tree Traversal": <TreeTraversalPage />,
 
   };
 
