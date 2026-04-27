@@ -1,20 +1,27 @@
-// Sorting/quickSort.js
 export function quickSort(array) {
     const steps = [];
     const arr = [...array];
 
     steps.push({
         array: [...arr],
-        explanation: "Initial",
-        description: `Starting Quick Sort with array: [${arr.join(', ')}]`
+        explanation: 'Initial',
+        description: `Starting Quick Sort with array: [${arr.join(', ')}]`,
+        comparing: [],
+        swapping: [],
+        pivotIndex: -1,
+        sorted: []
     });
 
     function partition(arr, low, high) {
         const pivot = arr[high];
         steps.push({
             array: [...arr],
-            explanation: "Select Pivot",
-            description: `Selected pivot: ${pivot} at index ${high}`
+            explanation: 'Select Pivot',
+            description: `Selected pivot: ${pivot} at index ${high}`,
+            comparing: [],
+            swapping: [],
+            pivotIndex: high,
+            sorted: []
         });
 
         let i = low - 1;
@@ -22,8 +29,12 @@ export function quickSort(array) {
         for (let j = low; j < high; j++) {
             steps.push({
                 array: [...arr],
-                explanation: "Compare",
-                description: `Comparing ${arr[j]} with pivot ${pivot}`
+                explanation: 'Compare',
+                description: `Comparing ${arr[j]} with pivot ${pivot}`,
+                comparing: [j, high],
+                swapping: [],
+                pivotIndex: high,
+                sorted: []
             });
 
             if (arr[j] < pivot) {
@@ -31,8 +42,12 @@ export function quickSort(array) {
                 [arr[i], arr[j]] = [arr[j], arr[i]];
                 steps.push({
                     array: [...arr],
-                    explanation: "Swap",
-                    description: `Swapped ${arr[i]} and ${arr[j]} (${arr[j]} < ${pivot})`
+                    explanation: 'Swap',
+                    description: `Swapped ${arr[i]} and ${arr[j]} (${arr[j]} < ${pivot})`,
+                    comparing: [],
+                    swapping: [i, j],
+                    pivotIndex: high,
+                    sorted: []
                 });
             }
         }
@@ -40,8 +55,12 @@ export function quickSort(array) {
         [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
         steps.push({
             array: [...arr],
-            explanation: "Place Pivot",
-            description: `Placed pivot ${pivot} at position ${i + 1}`
+            explanation: 'Place Pivot',
+            description: `Placed pivot ${pivot} at position ${i + 1}`,
+            comparing: [],
+            swapping: [i + 1, high],
+            pivotIndex: i + 1,
+            sorted: []
         });
 
         return i + 1;
@@ -59,8 +78,12 @@ export function quickSort(array) {
 
     steps.push({
         array: [...arr],
-        explanation: "Complete",
-        description: `Array sorted! Result: [${arr.join(', ')}]`
+        explanation: 'Complete',
+        description: `Array sorted! Result: [${arr.join(', ')}]`,
+        comparing: [],
+        swapping: [],
+        pivotIndex: -1,
+        sorted: Array.from({ length: arr.length }, (_, i) => i)
     });
 
     return steps;
